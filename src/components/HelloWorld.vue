@@ -1,58 +1,65 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="fill-width pt-3">
+    <v-card>
+      <v-row class="pt-0">
+        <v-col cols="2">
+          <SellersList />
+        </v-col>
+        <v-divider vertical></v-divider>
+        <v-col class="d-flex text-center">
+          <v-row class="text-center">
+            <v-col cols="12">
+              <v-img
+                :src="require('../assets/logo.svg')"
+                class="my-3"
+                contain
+                height="70"
+              />
+              <h1 class="display-1 font-weight-bold">Welcome to Vuetify</h1>
+
+              <p class="subheading font-weight-regular">
+                For help and collaboration with other Vuetify developers,
+                <br />please join our online
+                <a href="https://community.vuetifyjs.com" target="_blank"
+                  >Discord Community</a
+                >
+              </p>
+              <v-row>
+                <v-col>
+                  <SearchText />
+                </v-col>
+              </v-row>
+              <v-row>
+                <GoogleImagesList />
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-card>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
+import { defineComponent, onMounted } from "@vue/composition-api";
+import SellersList from "./SellersList.vue";
+import GoogleImagesList from "./GoogleImagesList.vue";
+import SearchText from "./SearchText.vue";
+import { useSellers } from "../store/sellers";
+const MainPanel = defineComponent({
+  name: "MainPanel",
+  components: {
+    SellersList,
+    SearchText,
+    GoogleImagesList,
+  },
+  setup() {
+    const sellers = useSellers();
+    onMounted(() => {
+      sellers.getSellersAPI();
+    });
+    return {};
+  },
+});
+export default MainPanel;
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
