@@ -1,11 +1,15 @@
 import { defineStore } from "pinia";
+import { useSellers } from "./sellers";
+import _ from "lodash";
 
 export const useGoogleImages = defineStore("googleImages", {
   state: () => ({
     response: {},
   }),
   getters: {
-    getImages: (state) => state.response.items,
+    getImages: (state) => {
+      return state.response.items;
+    },
   },
   actions: {
     addImages(payload) {
@@ -14,6 +18,7 @@ export const useGoogleImages = defineStore("googleImages", {
     newSearch() {},
     loadClientAPI() {},
     async getImagesAPI(query) {
+      const sellers = useSellers();
       let data = {
         url: `https://customsearch.googleapis.com/customsearch/v1?cx=03bb71055f8198b6f&q=${query}&start=10&key=AIzaSyA6w7qcirkA0EqaWnw89eM1UdAMTXfWY3Y`,
         method: "GET",
@@ -27,7 +32,11 @@ export const useGoogleImages = defineStore("googleImages", {
         method: data.method,
         headers: data.headers,
       }).then((res) => res.json());
-      console.log(sels);
+
+      sels.items.forEach((img) => {
+        img["seller"] =
+          sellers.getSellers[_.random(0, sellers.getSellers.length - 1)]["id"];
+      });
 
       this.response = sels;
     },

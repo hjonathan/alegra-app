@@ -1,17 +1,24 @@
 <template>
   <v-row>
-    <v-col
+    <v-card
       v-for="(item, index) in items"
       :key="index"
       class="d-flex child-flex"
-      cols="3"
+      max-width="250"
+      min-width="250"
+      elevation="0"
     >
       <v-hover v-slot="{ hover }">
         <v-card
-          :elevation="hover ? 12 : 2"
-          :class="{ 'on-hover': !hover, 'ma-4': true, 'google-images': true }"
+          :elevation="hover ? 12 : 0"
+          :class="{ 'on-hover': !hover, 'ma-0': true, 'google-images': true }"
+          @click="selectImage(item)"
         >
-          <v-img :src="getImage(item)" aspect-ratio="1" class="grey lighten-2">
+          <v-img
+            :src="getImage(item)"
+            aspect-ratio="1"
+            class="grey lighten-2 ma-4"
+          >
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular
@@ -37,7 +44,7 @@
                   <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
 
                   <v-card-actions>
-                    <v-btn color="teal lighten-2" text> Explore </v-btn>
+                    <v-btn color="teal lighten-2" text> SELECCIONAR </v-btn>
 
                     <v-spacer></v-spacer>
 
@@ -51,24 +58,27 @@
           </v-img>
         </v-card>
       </v-hover>
-    </v-col>
+    </v-card>
   </v-row>
 </template>
 
 <script>
 import { computed, defineComponent } from "@vue/composition-api";
 import { useGoogleImages } from "../store/googleImages";
+import { useSellers } from "../store/sellers";
+
 const GoogleImagesList = defineComponent({
   name: "GoogleImagesList",
   setup() {
     const googleImages = useGoogleImages();
+    const sellers = useSellers();
     //AIzaSyA6w7qcirkA0EqaWnw89eM1UdAMTXfWY3Y
     let items = computed(() => googleImages.getImages);
     console.log(items);
     return {
       items,
       icons: ["mdi-rewind", "mdi-play", "mdi-fast-forward"],
-      getImage: (item) => {
+      getImage(item) {
         if (item.pagemap.cse_thumbnail?.[0].src) {
           return item.pagemap.cse_thumbnail?.[0].src;
         }
@@ -78,6 +88,10 @@ const GoogleImagesList = defineComponent({
         if (item.pagemap.metatags?.[0]["msapplication-tileimage"]) {
           return item.pagemap.metatags?.[0]["msapplication-tileimage"];
         }
+      },
+      selectImage(image) {
+        console.log(image);
+        sellers.addSale(image.seller, 3);
       },
     };
   },
@@ -90,7 +104,7 @@ export default GoogleImagesList;
 }
 
 .v-card.google-images:not(.on-hover) {
-  opacity: 0.9;
+  opacity: 0.7;
 }
 
 .v-card.google-images-card:not(.on-hover) {

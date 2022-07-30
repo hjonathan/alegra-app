@@ -1,57 +1,63 @@
 <template>
   <v-app>
-    <v-app-bar
-      color="#fcb69f"
-      dark
-      elevation="0"
-      src="https://picsum.photos/1920/1080?random"
-      scroll-target="#scrolling-techniques-2"
-    >
-      <template v-slot:img="{ props }">
+    <v-app-bar absolute color="white" prominent fade-img-on-scroll style="z-index:200">
+      <v-card
+        class="d-flex align-center mt-2"
+        color="lighten-2 ml-16"
+        elevation="0"
+        height="100"
+        width="50%"
+      >
         <v-img
-          v-bind="props"
-          gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
-        ></v-img>
-      </template>
-
-      <v-img
-        alt="Vuetify Logo"
-        class="shrink mr-2"
-        contain
-        src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-        transition="scale-transition"
-        width="30"
-      />
-      <v-app-bar-title>App</v-app-bar-title>
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+          alt="Vuetify Logo"
+          class="shrink"
+          contain
+          src="https://i.pinimg.com/originals/73/7c/6a/737c6a8aabb692128609f9d7d5c5c8c0.png"
+          transition="scale-transition"
+          width="160"
+        />
+        <v-btn :disabled="loading" class="ma-1" color="grey" plain>
+          HOME
+        </v-btn>
+        <v-btn :disabled="loading" class="ma-1" color="grey" plain>
+          ABOUT
+        </v-btn>
+        <v-btn :disabled="loading" class="ma-1" color="grey" plain>
+          CONTACT
+        </v-btn>
+      </v-card>
+      <v-card
+        class="d-flex align-center justify-end mt-2"
+        color="lighten-2 mr-16"
+        elevation="0"
+        height="100"
+        width="50%"
+      >
+        <v-btn icon>
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+      </v-card>
     </v-app-bar>
+    <SellersList />
 
     <v-main>
-      <HelloWorld />
+      <v-sheet id="scrolling-techniques-3">
+        <MainPanel class="mt-16" />
+      </v-sheet>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+import MainPanel from "./components/MainPanel.vue";
+import SellersList from "./components/SellersList.vue";
 
 export default {
   name: "App",
 
   components: {
-    HelloWorld,
+    MainPanel,
+    SellersList,
   },
 
   data: () => ({

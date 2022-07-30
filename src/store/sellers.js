@@ -24,6 +24,10 @@ export const useSellers = defineStore("sellers", {
     addSeller(payload) {
       this.sellers.sellers.push(payload);
     },
+    addSale(idSeller, points) {
+      let seller = this.sellers.find((seller) => seller.id == idSeller);
+      seller.sales = seller.sales + points;
+    },
     async getSellersAPI() {
       let data = {
         url: "https://api.alegra.com/api/v1/sellers/",
@@ -35,7 +39,6 @@ export const useSellers = defineStore("sellers", {
           "content-type": "application/json",
         },
       };
-
       let sels = await fetch(data.url, {
         method: data.method,
         headers: data.headers,
@@ -43,6 +46,7 @@ export const useSellers = defineStore("sellers", {
       if (sels) {
         sels.forEach((seller) => {
           seller["avatar"] = this.avatars[_.random(0, this.avatars.length - 1)];
+          seller["sales"] = 0;
         });
         this.sellers = sels;
       } else {
