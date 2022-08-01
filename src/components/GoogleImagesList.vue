@@ -1,65 +1,68 @@
 <template>
-  <v-row>
-    <v-card
-      v-for="(item, index) in items"
-      :key="index"
-      class="d-flex child-flex"
-      max-width="250"
-      min-width="250"
-      elevation="0"
-    >
-      <v-hover v-slot="{ hover }">
-        <v-card
-          :elevation="hover ? 12 : 0"
-          :class="{ 'on-hover': !hover, 'ma-0': true, 'google-images': true }"
-          @click="selectImage(item)"
-        >
-          <v-img
-            :src="getImage(item)"
-            aspect-ratio="1"
-            class="grey lighten-2 ma-4"
+  <v-container>
+    <v-row>
+      <v-card
+        v-for="(item, index) in items"
+        :key="index"
+        class="d-flex child-flex"
+        max-width="250"
+        min-width="250"
+        elevation="0"
+      >
+        <v-hover v-slot="{ hover }">
+          <v-card
+            dense
+            :elevation="hover ? 12 : 0"
+            :class="{
+              'on-hover': !hover,
+              'pa-4': true,
+              'google-images': true,
+              'mx-auto': true,
+            }"
+            @click="selectImage(item)"
           >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="grey lighten-5"
-                ></v-progress-circular>
-              </v-row>
-            </template>
+            <v-img :src="getImage(item)" aspect-ratio="1">
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
+            <div class="d-flex flex-column align-start">
+              <span class="overline text-truncate col-12 px-0 py-0">
+                {{ item.title }}
+              </span>
 
-            <div class="d-block" style="height: 60%"></div>
-            <v-expand-transition>
-              <div class="d-flex fill-height fill-width">
-                <v-card
-                  :class="{
-                    'on-hover': hover,
-                    'google-images-card': true,
-                  }"
-                >
-                  <v-card-title class="caption text-truncate">
-                    {{ item.title }}
-                  </v-card-title>
+              <span
+                class="caption justify-start text-truncate col-12 px-0 py-0"
+              >
+                {{ item.formattedUrl }}
+              </span>
 
-                  <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
-
-                  <v-card-actions>
-                    <v-btn color="teal lighten-2" text> SELECCIONAR </v-btn>
-
-                    <v-spacer></v-spacer>
-
-                    <v-btn icon>
-                      <v-icon>{{ "mdi-chevron-down" }}</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
+              <div class="d-flex" style="width: 100%">
+                <v-btn color="orange lighten-2" text class="px-0">
+                  SELECCIONAR
+                </v-btn>
+                <v-spacer />
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-avatar size="30px" v-bind="attrs" v-on="on">
+                      <img :src="getSellerAvatar(item)" alt="John" />
+                    </v-avatar>
+                  </template>
+                  <span>{{ getSellerName(item) }}</span>
+                </v-tooltip>
               </div>
-            </v-expand-transition>
-          </v-img>
-        </v-card>
-      </v-hover>
-    </v-card>
-  </v-row>
+            </div>
+          </v-card>
+        </v-hover>
+      </v-card>
+    </v-row>
+    <v-row> JONAS </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -74,10 +77,8 @@ const GoogleImagesList = defineComponent({
     const sellers = useSellers();
     //AIzaSyA6w7qcirkA0EqaWnw89eM1UdAMTXfWY3Y
     let items = computed(() => googleImages.getImages);
-    console.log(items);
     return {
       items,
-      icons: ["mdi-rewind", "mdi-play", "mdi-fast-forward"],
       getImage(item) {
         if (item.pagemap.cse_thumbnail?.[0].src) {
           return item.pagemap.cse_thumbnail?.[0].src;
@@ -89,8 +90,16 @@ const GoogleImagesList = defineComponent({
           return item.pagemap.metatags?.[0]["msapplication-tileimage"];
         }
       },
+      getSellerAvatar(item) {
+        let seller = sellers.getSeller(item.seller);
+        console.log(seller);
+        return seller["avatar"];
+      },
+      getSellerName(item) {
+        let seller = sellers.getSeller(item.seller);
+        return seller["name"];
+      },
       selectImage(image) {
-        console.log(image);
         sellers.addSale(image.seller, 3);
       },
     };

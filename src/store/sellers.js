@@ -19,6 +19,11 @@ export const useSellers = defineStore("sellers", {
   }),
   getters: {
     getSellers: (state) => state.sellers,
+    getSeller: (state) => (id) => {
+      console.log("GETSELLER");
+      let a = state.sellers.find((seller) => seller.id === id);
+      return a;
+    },
   },
   actions: {
     addSeller(payload) {

@@ -1,40 +1,47 @@
 <template>
-  <v-container class="pt-16">
-    <v-card>
-      <v-row class="pt-0">
- 
-        <v-col class="d-flex text-center">
-          <v-row class="text-center">
-            <v-col cols="12">
-              <v-img
-                :src="require('../assets/logo.svg')"
-                class="my-3"
-                contain
-                height="70"
-              />
-              <h1 class="display-1 font-weight-bold">Welcome to Vuetify</h1>
-
-              <p class="subheading font-weight-regular">
-                For help and collaboration with other Vuetify developers,
-                <br />please join our online
-                <a href="https://community.vuetifyjs.com" target="_blank"
-                  >Discord Community</a
-                >
-              </p>
-              <v-row>
-                <v-col>
-                  <SearchText />
-                </v-col>
-              </v-row>
-              <v-row>
-                <GoogleImagesList />
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-container>
+  <div class="pt-16">
+    <v-img
+      class="white--text mx-16"
+      height="250px"
+      src="https://template.hasthemes.com/tm/resta/resta/images/bg/breadcrubs.jpg"
+    >
+      <v-card
+        class="d-flex align-center justify-center mt-6 fill-height"
+        color="transparent"
+        elevation="0"
+      >
+        <v-row align="center" justify="center" class="pt-16">
+          <v-col class="text-center" cols="12">
+            <h1 class="text-h4 font-weight-thin mb-4">Imagenes del Mundo</h1>
+            <!--h4 class="subheading">Build your application today!</h4-->
+            <v-row>
+              <v-col cols="4"></v-col>
+              <v-col cols="4"> <SearchText /></v-col>
+              <v-col cols="4"></v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-img>
+    <v-container class="px-16">
+      <v-card class="mx-auto" elevation="0">
+        <v-row class="pt-0">
+          <v-col class="d-flex text-center">
+            <v-row class="text-center">
+              <v-col>
+                <v-row>
+                  <v-col> </v-col>
+                </v-row>
+                <v-row>
+                  <GoogleImagesList />
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -58,3 +65,8 @@ const MainPanel = defineComponent({
 });
 export default MainPanel;
 </script>
+<style scoped>
+.img-world {
+  font-size: 2rem !important;
+}
+</style>

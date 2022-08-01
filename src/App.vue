@@ -1,6 +1,14 @@
 <template>
   <v-app>
-    <v-app-bar absolute color="white" prominent fade-img-on-scroll style="z-index:200">
+    <v-app-bar
+      absolute
+      color="white"
+      prominent
+      permanent
+      elevate-on-scroll
+      scroll-target="#scrolling-techniques-7"
+      style="z-index: 200"
+    >
       <v-card
         class="d-flex align-center mt-2"
         color="lighten-2 ml-16"
@@ -40,11 +48,7 @@
     </v-app-bar>
     <SellersList />
 
-    <v-main>
-      <v-sheet id="scrolling-techniques-3">
-        <MainPanel class="mt-16" />
-      </v-sheet>
-    </v-main>
+    <MainPanel class="mt-16" />
   </v-app>
 </template>
 

@@ -3,30 +3,44 @@
     class="v-sellers"
     v-model="drawer"
     absolute
+    @click="mini = !mini"
     :mini-variant.sync="mini"
   >
-    <v-card
-      class="d-flex"
-      color="lighten-2"
-      elevation="0"
-    >
-      <v-avatar>
-        <img
+    <v-list-item class="px-2">
+      <v-list-item-avatar>
+        <v-img
           src="https://i.pinimg.com/originals/73/7c/6a/737c6a8aabb692128609f9d7d5c5c8c0.png"
-          alt="John"
-        />
-      </v-avatar>
+        ></v-img>
+      </v-list-item-avatar>
 
+      <v-list-item-title>Vendedores</v-list-item-title>
 
-    </v-card>
+      <v-btn icon @click.stop="mini = !mini">
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+    </v-list-item>
 
     <v-list dense>
-      <v-subheader v-text="'Vendedores'"></v-subheader>
       <template v-for="(item, index) in items">
         <v-list-item :key="item.title" class="ml-0 pl-2">
-          <v-list-item-avatar>
-            <v-img :src="item.avatar" width="20"></v-img>
-          </v-list-item-avatar>
+          <v-badge
+            offset-x="20"
+            offset-y="50"
+            :color="
+              mini
+                ? item.sales >= 20
+                  ? 'green'
+                  : 'red lighten-1'
+                : 'transparent'
+            "
+          >
+            <template v-slot:badge v-if="mini">
+              <span class="mt-1"> {{ item.sales }}</span>
+            </template>
+            <v-avatar size="35" class="my-3 mr-2">
+              <v-img :src="item.avatar"></v-img>
+            </v-avatar>
+          </v-badge>
 
           <v-list-item-content>
             <v-list-item-title v-html="item.name"></v-list-item-title>
@@ -52,7 +66,7 @@
 </template>
 
 <script>
-import { defineComponent, computed } from "@vue/composition-api";
+import { defineComponent, computed, ref } from "@vue/composition-api";
 import { useSellers } from "../store/sellers";
 const SellersList = defineComponent({
   name: "SellersList",
@@ -64,7 +78,7 @@ const SellersList = defineComponent({
       items,
       drawer: true,
 
-      mini: true,
+      mini: ref(true),
     };
   },
 });

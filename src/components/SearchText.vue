@@ -1,29 +1,27 @@
 <template>
-  <v-text-field
-    v-model="message"
-    outlined
-    clearable
-    type="text"
-    class="mx-auto"
-    @keydown="search"
-  >
-    <template v-slot:prepend>
-      <v-icon> mdi-magnify </v-icon>
-    </template>
-    <template v-slot:append>
-      <v-progress-circular
-        size="24"
-        color="info"
-        indeterminate
-      ></v-progress-circular>
-      <img
-        width="24"
-        height="24"
-        src="https://cdn.vuetifyjs.com/images/logos/v-alt.svg"
-        alt=""
-      />
-    </template>
-  </v-text-field>
+  <div class="d-flex align-stretch">
+    <v-text-field
+      v-model="message"
+      outlined
+      clearable
+      type="text"
+      class="mx-auto"
+      placeholder="Busca imagenes..."
+      @keydown="search"
+    >
+      <template v-slot:prepend>
+        <v-icon> mdi-magnify </v-icon>
+      </template>
+      <template v-slot:append>
+        <!--v-progress-circular
+          size="24"
+          color="info"
+          indeterminate
+        ></v-progress-circular-->
+      </template>
+    </v-text-field>
+    <v-btn depressed color="error" class="btn-search mx-4"> BUSCAR </v-btn>
+  </div>
 </template>
 
 <script>
@@ -46,3 +44,8 @@ const SearchText = defineComponent({
 });
 export default SearchText;
 </script>
+<style scoped>
+.btn-search {
+  height: 56px !important;
+}
+</style>
