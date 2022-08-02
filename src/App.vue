@@ -5,9 +5,7 @@
       color="white"
       prominent
       permanent
-      elevate-on-scroll
-      scroll-target="#scrolling-techniques-7"
-      style="z-index: 200"
+      style="z-index: 200; position: fixed"
     >
       <v-card
         class="d-flex align-center mt-2"
@@ -24,15 +22,9 @@
           transition="scale-transition"
           width="160"
         />
-        <v-btn :disabled="loading" class="ma-1" color="grey" plain>
-          HOME
-        </v-btn>
-        <v-btn :disabled="loading" class="ma-1" color="grey" plain>
-          ABOUT
-        </v-btn>
-        <v-btn :disabled="loading" class="ma-1" color="grey" plain>
-          CONTACT
-        </v-btn>
+        <v-btn class="ma-1" color="grey" plain> HOME </v-btn>
+        <v-btn class="ma-1" color="grey" plain> ABOUT </v-btn>
+        <v-btn class="ma-1" color="grey" plain> CONTACT </v-btn>
       </v-card>
       <v-card
         class="d-flex align-center justify-end mt-2"
@@ -46,26 +38,58 @@
         </v-btn>
       </v-card>
     </v-app-bar>
-    <SellersList />
+
+    <SellersList @updateSeller="updateSeller" />
 
     <MainPanel class="mt-16" />
+    <v-dialog persistent v-model="dialog" width="1000"
+      ><InvoiceView />
+    </v-dialog>
+    <v-dialog v-model="dialogSummary" width="1000"
+      ><SummarySeller
+        v-if="dialogSummary && seller"
+        :seller="seller"
+        :key="key"
+      />
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
 import MainPanel from "./components/MainPanel.vue";
 import SellersList from "./components/SellersList.vue";
+import InvoiceView from "./components/InvoiceView.vue";
+import SummarySeller from "./components/SummarySeller.vue";
 
-export default {
-  name: "App",
+import { useSales } from "./store/sales";
+import { defineComponent, computed, ref } from "@vue/composition-api";
 
+const AppAlegra = defineComponent({
+  name: "AppAlegra",
   components: {
     MainPanel,
     SellersList,
+    InvoiceView,
+    SummarySeller,
   },
 
-  data: () => ({
-    //
-  }),
-};
+  setup: () => {
+    const sales = useSales();
+    let dialogSummary = ref(false);
+    let seller = ref(null);
+    let key = ref(0);
+    return {
+      dialog: computed(() => sales.getShowInvoice),
+      dialogSummary,
+      seller,
+      key,
+      updateSeller(sel) {
+        seller.value = sel;
+        dialogSummary.value = true;
+        key.value++;
+      },
+    };
+  },
+});
+export default AppAlegra;
 </script>

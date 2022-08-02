@@ -1,44 +1,64 @@
 import { defineStore } from "pinia";
 import { useSellers } from "./sellers";
 import _ from "lodash";
+import { api } from "./../composables/gapi";
 
 export const useGoogleImages = defineStore("googleImages", {
   state: () => ({
     response: {},
+    items: [],
   }),
   getters: {
     getImages: (state) => {
-      return state.response.items;
+      return state.items;
     },
   },
   actions: {
-    addImages(payload) {
-      this.sellers.sellers.push(payload);
-    },
     newSearch() {},
     loadClientAPI() {},
-    async getImagesAPI(query) {
+    async getNewSearch(query) {
       const sellers = useSellers();
-      let data = {
-        url: `https://customsearch.googleapis.com/customsearch/v1?cx=03bb71055f8198b6f&q=${query}&start=10&key=AIzaSyA6w7qcirkA0EqaWnw89eM1UdAMTXfWY3Y`,
-        method: "GET",
-        params: {},
-        headers: {
-          "content-type": "application/json",
-        },
-      };
+      let res = await api.call("customsearch", {
+        query: query,
+        start: 0,
+      });
 
-      let sels = await fetch(data.url, {
-        method: data.method,
-        headers: data.headers,
-      }).then((res) => res.json());
-
-      sels.items.forEach((img) => {
+      res.items.forEach((img) => {
         img["seller"] =
           sellers.getSellers[_.random(0, sellers.getSellers.length - 1)]["id"];
       });
+      this.response = res;
+      this.items = res.items;
+    },
+    async getShowMore() {
+      const sellers = useSellers();
+      let start = this.response?.queries
+        ? this.response.queries.nextPage[0]["startIndex"]
+        : 0;
+      let q = this.response?.queries
+        ? this.response.queries.nextPage[0]["searchTerms"]
+        : "";
 
-      this.response = sels;
+      let sels = await api.call("customsearch", {
+        query: q,
+        start: start,
+      });
+
+      if (sels) {
+        sels.items.forEach((img) => {
+          img["seller"] =
+            sellers.getSellers[_.random(0, sellers.getSellers.length - 1)][
+              "id"
+            ];
+        });
+
+        this.response = sels;
+        this.items = this.items.concat(sels.items);
+      }
+    },
+    reset() {
+      this.response = {};
+      this.items = [];
     },
   },
 });

@@ -20,7 +20,9 @@
         ></v-progress-circular-->
       </template>
     </v-text-field>
-    <v-btn depressed color="error" class="btn-search mx-4"> BUSCAR </v-btn>
+    <v-btn depressed color="error" class="btn-search mx-4" @click="btnSearch">
+      BUSCAR
+    </v-btn>
   </div>
 </template>
 
@@ -36,8 +38,11 @@ const SearchText = defineComponent({
       message,
       search(ev) {
         if (ev.keyCode == 13) {
-          googleImages.getImagesAPI(message.value);
+          googleImages.getNewSearch(message.value);
         }
+      },
+      btnSearch() {
+        googleImages.getNewSearch(message.value);
       },
     };
   },

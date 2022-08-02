@@ -2,7 +2,7 @@
   <div class="pt-16">
     <v-img
       class="white--text mx-16"
-      height="250px"
+      height="200px"
       src="https://template.hasthemes.com/tm/resta/resta/images/bg/breadcrubs.jpg"
     >
       <v-card
@@ -60,7 +60,8 @@ const MainPanel = defineComponent({
     onMounted(() => {
       sellers.getSellersAPI();
     });
-    return {};
+    return {
+    };
   },
 });
 export default MainPanel;

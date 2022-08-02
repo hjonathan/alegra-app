@@ -61,7 +61,13 @@
         </v-hover>
       </v-card>
     </v-row>
-    <v-row> JONAS </v-row>
+    <v-row>
+      <v-col v-if="items.length != 0">
+        <v-btn text color="warning" @click="showMore">
+          Mostrar mas
+        </v-btn></v-col
+      >
+    </v-row>
   </v-container>
 </template>
 
@@ -69,12 +75,14 @@
 import { computed, defineComponent } from "@vue/composition-api";
 import { useGoogleImages } from "../store/googleImages";
 import { useSellers } from "../store/sellers";
+import { useSales } from "../store/sales";
 
 const GoogleImagesList = defineComponent({
   name: "GoogleImagesList",
   setup() {
     const googleImages = useGoogleImages();
     const sellers = useSellers();
+    const sales = useSales();
     //AIzaSyA6w7qcirkA0EqaWnw89eM1UdAMTXfWY3Y
     let items = computed(() => googleImages.getImages);
     return {
@@ -92,7 +100,6 @@ const GoogleImagesList = defineComponent({
       },
       getSellerAvatar(item) {
         let seller = sellers.getSeller(item.seller);
-        console.log(seller);
         return seller["avatar"];
       },
       getSellerName(item) {
@@ -100,7 +107,13 @@ const GoogleImagesList = defineComponent({
         return seller["name"];
       },
       selectImage(image) {
-        sellers.addSale(image.seller, 3);
+        sales.addSale({
+          idSeller: image.seller,
+          photo: image,
+        });
+      },
+      showMore() {
+        googleImages.getShowMore();
       },
     };
   },

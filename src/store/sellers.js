@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import _ from "lodash";
+import { useSales } from "./sales";
+import { api } from "./../composables/gapi";
 
 export const useSellers = defineStore("sellers", {
   state: () => ({
@@ -18,9 +20,10 @@ export const useSellers = defineStore("sellers", {
     ],
   }),
   getters: {
-    getSellers: (state) => state.sellers,
+    getSellers: (state) => {
+      return state.sellers;
+    },
     getSeller: (state) => (id) => {
-      console.log("GETSELLER");
       let a = state.sellers.find((seller) => seller.id === id);
       return a;
     },
@@ -29,34 +32,24 @@ export const useSellers = defineStore("sellers", {
     addSeller(payload) {
       this.sellers.sellers.push(payload);
     },
-    addSale(idSeller, points) {
-      let seller = this.sellers.find((seller) => seller.id == idSeller);
-      seller.sales = seller.sales + points;
-    },
     async getSellersAPI() {
-      let data = {
-        url: "https://api.alegra.com/api/v1/sellers/",
-        method: "GET",
-        params: {},
-        headers: {
-          authorization:
-            "Basic aGpvbmF0aGFuLnNnZUBnbWFpbC5jb206MzFiMThiMGVjNmZjMjM1NTQ2MmQ=",
-          "content-type": "application/json",
-        },
-      };
-      let sels = await fetch(data.url, {
-        method: data.method,
-        headers: data.headers,
-      }).then((res) => res.json());
+      const sales = useSales();
+      let sels = await api.call("sellers", {});
       if (sels) {
         sels.forEach((seller) => {
           seller["avatar"] = this.avatars[_.random(0, this.avatars.length - 1)];
-          seller["sales"] = 0;
+          sales.newSale(seller.id);
         });
         this.sellers = sels;
       } else {
         this.sellers = [];
       }
+    },
+    reset() {
+      const sales = useSales();
+      this.sellers.forEach((seller) => {
+        sales.newSale(seller.id);
+      });
     },
   },
 });
