@@ -45,12 +45,11 @@
     <v-dialog persistent v-model="dialog" width="1000"
       ><InvoiceView />
     </v-dialog>
-    <v-dialog v-model="dialogSummary" width="1000"
-      ><SummarySeller
-        v-if="dialogSummary && seller"
-        :seller="seller"
-        :key="key"
-      />
+    <v-dialog
+      v-model="dialogSummary"
+      v-if="dialogSummary && seller"
+      width="1000"
+      ><SummarySeller :seller="seller" />
     </v-dialog>
   </v-app>
 </template>
@@ -84,9 +83,8 @@ const AppAlegra = defineComponent({
       seller,
       key,
       updateSeller(sel) {
-        seller.value = sel;
         dialogSummary.value = true;
-        key.value++;
+        seller.value = sel;
       },
     };
   },

@@ -14,7 +14,9 @@ export const useGoogleImages = defineStore("googleImages", {
     },
   },
   actions: {
-    newSearch() {},
+    setImages(items) {
+      this.items = items;
+    },
     loadClientAPI() {},
     async getNewSearch(query) {
       const sellers = useSellers();
@@ -26,6 +28,7 @@ export const useGoogleImages = defineStore("googleImages", {
       res.items.forEach((img) => {
         img["seller"] =
           sellers.getSellers[_.random(0, sellers.getSellers.length - 1)]["id"];
+        img["disabled"] = false;
       });
       this.response = res;
       this.items = res.items;
@@ -50,6 +53,7 @@ export const useGoogleImages = defineStore("googleImages", {
             sellers.getSellers[_.random(0, sellers.getSellers.length - 1)][
               "id"
             ];
+          img["disabled"] = false;
         });
 
         this.response = sels;

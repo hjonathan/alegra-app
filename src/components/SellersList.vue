@@ -89,6 +89,12 @@ const SellersList = defineComponent({
         context.emit("updateSeller", items.value[nVal]);
       }
     });
+    watch(mini, (nVal) => {
+      if (nVal == false) {
+        selectedItem.value = null;
+      }
+    });
+
     return {
       items,
       drawer: true,

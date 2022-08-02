@@ -19,7 +19,6 @@
               'google-images': true,
               'mx-auto': true,
             }"
-            @click="selectImage(item)"
           >
             <v-img :src="getImage(item)" aspect-ratio="1">
               <template v-slot:placeholder>
@@ -43,8 +42,14 @@
               </span>
 
               <div class="d-flex" style="width: 100%">
-                <v-btn color="orange lighten-2" text class="px-0">
-                  SELECCIONAR
+                <v-btn
+                  color="orange lighten-2"
+                  text
+                  class="px-0"
+                  v-if="!item.disabled"
+                  @click="selectImage(item, index)"
+                >
+                  Agregar
                 </v-btn>
                 <v-spacer />
                 <v-tooltip bottom>
@@ -84,7 +89,14 @@ const GoogleImagesList = defineComponent({
     const sellers = useSellers();
     const sales = useSales();
     //AIzaSyA6w7qcirkA0EqaWnw89eM1UdAMTXfWY3Y
-    let items = computed(() => googleImages.getImages);
+    let items = computed({
+      get() {
+        return googleImages.getImages;
+      },
+      set(images) {
+        googleImages.setImages(images);
+      },
+    });
     return {
       items,
       getImage(item) {
@@ -106,11 +118,12 @@ const GoogleImagesList = defineComponent({
         let seller = sellers.getSeller(item.seller);
         return seller["name"];
       },
-      selectImage(image) {
+      selectImage(image, index) {
         sales.addSale({
           idSeller: image.seller,
           photo: image,
         });
+        items.value[index]["disabled"] = true;
       },
       showMore() {
         googleImages.getShowMore();
